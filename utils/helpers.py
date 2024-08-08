@@ -57,7 +57,40 @@ def create_prompt(patient):
     prompt += 'and the ranked preliminary diagnoses. GPT helps perform fast and effective triage '
     prompt += 'in the emergency department environment by carefully evaluating the patient information provided. '
     prompt += 'Example return result(Keys in English, values in Turkish): { "triage_class": "Triyaj sonucu", "pre_diag": ["Ön tanı 1", "Ön tanı 2", "Ön tanı 3"], "examination": ["Tetkik 1", "Tetkik 2", "Tetkik 3"], "treatment": ["Tedavi 1", "Tedavi 2", "Tedavi 3"],"success":True or False (If you think the values ​​are written correctly, write the success value as true. If you think there is an error in the return json format, write the success value as false.)} '
-    prompt += f" Patient information: Age: {patient.age}, Gender: {patient.gender}. Complaints: {patient.complaints}, Duration of complaint: {patient.duration}. Vital signs: Blood pressure {patient.blood_pressure} mmHg, Pulse {patient.pulse} bpm, Respiratory rate {patient.respiratory_rate} breaths/minute, Temperature {patient.temperature} °C. Saturation %{patient.saturation}. Chronic diseases: {patient.chronic_diseases}. Medications in use: {patient.medications}, Allergy history: {patient.allergy_history}, Surgical history: {patient.surgical_history}. Short summary of complaint in patient's own words: \"{patient.summary}\",Type of Emergency service coming: (Kendi imkanı, 112, Sevk vb.){patient.service_coming}"
+    prompt += "Patient information:"
+
+    if patient.age:
+        prompt += f" Age: {patient.age},"
+    if patient.gender:
+        prompt += f" Gender: {patient.gender},"
+    if patient.complaints:
+        prompt += f" Complaints: {patient.complaints},"
+    if patient.duration:
+        prompt += f" Duration of complaint: {patient.duration},"
+    if patient.blood_pressure:
+        prompt += f" Vital signs: Blood pressure {patient.blood_pressure} mmHg,"
+    if patient.pulse:
+        prompt += f" Pulse {patient.pulse} bpm,"
+    if patient.respiratory_rate:
+        prompt += f" Respiratory rate {patient.respiratory_rate} breaths/minute,"
+    if patient.temperature:
+        prompt += f" Temperature {patient.temperature} °C,"
+    if patient.saturation:
+        prompt += f" Saturation %{patient.saturation},"
+    if patient.chronic_diseases:
+        prompt += f" Chronic diseases: {patient.chronic_diseases},"
+    if patient.medications:
+        prompt += f" Medications in use: {patient.medications},"
+    if patient.allergy_history:
+        prompt += f" Allergy history: {patient.allergy_history},"
+    if patient.surgical_history:
+        prompt += f" Surgical history: {patient.surgical_history},"
+    if patient.summary:
+        prompt += f" Short summary of complaint in patient's own words: \"{patient.summary}\","
+    if patient.service_coming:
+        prompt += f" Type of Emergency service coming: {patient.service_coming}"
+
+    
     return prompt
 
 
