@@ -27,7 +27,7 @@
                         </div>
                         {% endif %}
                         {% endwith %}
-                        <form action="/auth/register" method="POST">
+                        <form id="registerForm" action="/auth/register" method="POST">
                             <div class="form-group">
                                 <label for="username">Kullanıcı Adı:</label>
                                 <div class="input-group">
@@ -66,6 +66,25 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Formun otomatik gönderimini engelle
+            var form = event.target;
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url; // Başarıyla kaydedildiğinde yönlendirme yap
+                } else {
+                    alert(data.error); // Hata varsa göster
+                }
+            });
+        });
+    </script>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -13,11 +13,12 @@ def register():
         token, error = auth_register(data['username'], data['email'], data['password'])
         if error:
             flash(error, 'danger')
-            return redirect(url_for('app_bp.auth_bp.register'))
-        response = redirect(url_for('app_bp.main_bp.home'))
+            return jsonify({'success': False, 'error': error}), 400
+        response = jsonify({'success': True, 'redirect_url': url_for('app_bp.main_bp.home')})
         set_access_cookies(response, token)
         return response, 201
     return render_template('register.html')
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
