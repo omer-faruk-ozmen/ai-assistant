@@ -1,0 +1,196 @@
+
+from datetime import datetime
+from io import BytesIO
+import os
+import time
+from typing import Any, Dict
+from dotenv import load_dotenv
+from flask import json, request
+from concurrent.futures import  ThreadPoolExecutor, as_completed
+from flask_jwt_extended import get_jwt_identity
+import pandas as pd
+from openai import OpenAI
+from models.conclusion import Conclusion
+from models.diagnosis import Diagnosis
+from models.examination import Examination
+from models.intervention import Intervention
+from models.user import User
+from repositories.conclusion_repository import ConclusionRepository
+from repositories.diagnosis_repository import DiagnosisRepository
+from repositories.examination_repository import ExaminationRepository
+from repositories.intervention_repository import InterventionRepository
+from repositories.request_repository import RequestRepository
+from services.api_service import ApiService
+
+load_dotenv()
+
+#client=OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+assistant_id = os.environ.get('OPENAI_ASSISTANT_ID')
+
+conclusion_repo = ConclusionRepository()
+diagnosis_repo = DiagnosisRepository()
+examination_repo = ExaminationRepository()
+intervention_repo = InterventionRepository()
+
+thread_ids=[]
+
+def get_client_ip():
+    return request.environ.get('HTTP_X_FORWARDED_FOR') or request.environ['REMOTE_ADDR']
+
+def get_current_user():
+    user_identity = get_jwt_identity()
+    if user_identity:
+        print("get current user")
+        print(user_identity)
+        print(User.query.get(user_identity['id']))
+        return User.query.get(user_identity['id'])
+    return 'Unknown'
+def create_prompt(patient):
+    """Create a prompt for AI processing based on patient data."""
+    prompt = 'This GPT is designed to support the triage process in the emergency department setting. '
+    prompt += 'The goal is to determine in which area '
+    prompt += '(Yeşil, Sarı, or Kırmızı) the patient should be seen in the ED and provide only the triage '
+    prompt += 'result ("Yeşil", "Sarı", or "Kırmızı"). It then lists in JSON format the maximum 10 possible '
+    prompt += 'preliminary diagnoses for this patient, the maximum 10 tests that should be ordered, '
+    prompt += 'and the maximum 10 treatment recommendations that should be started, ranked from most '
+    prompt += 'likely to least likely. The response format is concise, including the triage result '
+    prompt += 'and the ranked preliminary diagnoses. GPT helps perform fast and effective triage '
+    prompt += 'in the emergency department environment by carefully evaluating the patient information provided. '
+    prompt += 'Example return result(Keys in English, values in Turkish): { "triage_class": "Triyaj sonucu", "pre_diag": ["Ön tanı 1", "Ön tanı 2", "Ön tanı 3"], "examination": ["Tetkik 1", "Tetkik 2", "Tetkik 3"], "treatment": ["Tedavi 1", "Tedavi 2", "Tedavi 3"],"success":True or False (If you think the values ​​are written correctly, write the success value as true. If you think there is an error in the return json format, write the success value as false.)} '
+    prompt += f" Patient information: Age: {patient.age}, Gender: {patient.gender}. Complaints: {patient.complaints}, Duration of complaint: {patient.duration}. Vital signs: Blood pressure {patient.blood_pressure} mmHg, Pulse {patient.pulse} bpm, Respiratory rate {patient.respiratory_rate} breaths/minute, Temperature {patient.temperature} °C. Saturation %{patient.saturation}. Chronic diseases: {patient.chronic_diseases}. Medications in use: {patient.medications}, Allergy history: {patient.allergy_history}, Surgical history: {patient.surgical_history}. Short summary of complaint in patient's own words: \"{patient.summary}\",Type of Emergency service coming: (Kendi imkanı, 112, Sevk vb.){patient.service_coming}"
+    return prompt
+
+
+base_url = "https://api.openai.com"
+headers = {
+    "Authorization": f"Bearer {os.environ.get('OPENAI_API_KEY')}",
+    "Content-Type": "application/json",
+    "OpenAI-Beta":"assistants=v2"
+}
+
+repository = RequestRepository(base_url, headers)
+api_service = ApiService(repository)
+
+executor = ThreadPoolExecutor(max_workers=10)
+
+def generate_with_ai( prompt: str) -> Dict[str, Any]:
+    create_response = api_service.create_thread(assistant_id, prompt)
+    thread_id = create_response['thread_id']
+    run_id = create_response['id']
+
+    thread_ids.append(thread_id)
+
+    if len(thread_ids)>20:
+        oldest_thread_id = thread_ids.pop(0)
+        delete_thread(oldest_thread_id)
+
+    future = executor.submit(check_thread_status, thread_id, run_id)
+    messages_response = future.result()
+    
+    return messages_response
+
+def delete_thread(thread_id):
+    response = api_service.delete_thread(thread_id)
+    return response
+
+def check_thread_status(thread_id: str, run_id: str) -> Dict[str, Any]:
+    while True:
+        status_response = api_service.get_thread_status(thread_id, run_id)
+        if status_response['status'] == 'completed':
+            # Mesajları al ve geri dön
+            messages_response = api_service.get_thread_messages(thread_id)
+            return messages_response
+        time.sleep(1)  # Durum kontrolü için bekle
+
+def proccess_data(data):
+    for message in data['data']:
+        if message['role'] == 'assistant':
+            content = message['content'][0]['text']['value']
+            try:
+                json_content = json.loads(content)
+                return json_content
+            except KeyError as e:
+                print(f"KeyError: {e}")
+            except json.JSONDecodeError as e:
+                print(f"JSONDecodeError: {e}")
+
+def process_patient_dict_data(patient_id,response,prompt):
+
+    data = proccess_data(response)
+
+    triage_class = data['triage_class']
+    
+    conclusion_repo.add(Conclusion(patient_id=patient_id,triage_class=triage_class,prompt=prompt))
+    
+    for diag in data['pre_diag']:
+        diagnosis_repo.add(Diagnosis(patient_id=patient_id,diagnosis=diag))
+    
+    for exam in data['examination']:
+        examination_repo.add(Examination(patient_id=patient_id, examination=exam))
+
+    for treatment in data['treatment']:
+        intervention_repo.add(Intervention(patient_id=patient_id, intervention=treatment))
+
+
+def process_patient_data(patient_id,response,prompt):
+
+    data = json.loads(response)
+
+    triage_class = data['triage_class']
+    
+    conclusion_repo.add(Conclusion(patient_id=patient_id,triage_class=triage_class,prompt=prompt))
+    
+    for diag in data['pre_diag']:
+        diagnosis_repo.add(Diagnosis(patient_id=patient_id,diagnosis=diag))
+    
+    for exam in data['examination']:
+        examination_repo.add(Examination(patient_id=patient_id, examination=exam))
+
+    for treatment in data['treatment']:
+        intervention_repo.add(Intervention(patient_id=patient_id, intervention=treatment))
+
+
+def generate_excel(patients):
+    data = []
+    for patient in patients:
+        conclusion_result = patient.conclusion.result if patient.conclusion else "Sonuç Yok"
+        diagnoses = "; ".join([d.diagnosis for d in patient.diagnoses])
+        examinations = "; ".join([e.examination for e in patient.examinations])
+        interventions = "; ".join([i.intervention for i in patient.interventions])
+
+
+        data.append({
+            "Protokol": patient.protokol,
+            "Tarih": patient.date,
+            "Oluşturan": patient.user.username,
+            "IP Adresi": patient.ip_address,
+            "Triaj": patient.triaj,
+            "Yapay Zeka Triaj": patient.conclusion.triage_class if patient.conclusion else "YOK",
+            "Yaş": patient.age,
+            "Cinsiyet": patient.gender,
+            "Şikayet": patient.complaints,
+            "Süre": patient.duration,
+            "Kan Basıncı": patient.blood_pressure,
+            "Nabız": patient.pulse,
+            "Solunum Hızı": patient.respiratory_rate,
+            "Sıcaklık": patient.temperature,
+            "Saturasyon": patient.saturation,
+            "Kronik Hastalıklar": patient.chronic_diseases,
+            "İlaçlar": patient.medications,
+            "Alerji Geçmişi": patient.allergy_history,
+            "Cerrahi Geçmiş": patient.surgical_history,
+            "Özet": patient.summary,
+            "Geliş Tipi":patient.service_coming,
+            "Kullanıcı": patient.user.username if patient.user else "Bilinmiyor",
+            "Sonuç": conclusion_result,
+            "Tanılar": diagnoses,
+            "Tetkikler": examinations,
+            "Müdahaleler": interventions
+        })
+
+    df = pd.DataFrame(data)
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Patients')
+    output.seek(0)
+    return output

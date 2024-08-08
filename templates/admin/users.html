@@ -1,0 +1,113 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Kullanıcılar{% endblock %}
+
+{% block admin_content %}
+
+</style>
+<div class="container-fluid">
+    <h2>Kullanıcılar</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kullanıcı Adı</th>
+                    <th>E-posta</th>
+                    <th>Hasta Sayısı</th>
+                    <th>Rol</th>
+                    <th>Eylem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr class="user-row {{ 'table-danger' if user.is_blocked else '' }}" data-url="{{ url_for('app_bp.admin_bp.user_patients', user_id=user.id) }}">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{user.patient_count}}</td>
+                    <td>{{ user.role }} 
+                        <button class="btn btn-warning btn-sm edit-role-btn" data-id="{{ user.id }}" data-username="{{ user.username }}" data-role="{{ user.role }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>
+                        {% if user.is_blocked %}
+                        <form action="{{ url_for('app_bp.admin_bp.unblock_user_route', user_id=user.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm">Engeli Kaldır</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('app_bp.admin_bp.block_user_route', user_id=user.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Engelle</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Edit Role Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRoleModalLabel">Rolü Düzenle</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editRoleForm" method="post" action="{{ url_for('app_bp.admin_bp.update_user_role') }}">
+                <div class="modal-body">
+                    <input type="hidden" id="edit_user_id" name="id" />
+                    <div class="form-group">
+                        <label for="edit_username">Kullanıcı Adı:</label>
+                        <input type="text" class="form-control" id="edit_username" name="username" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_role">Rol:</label>
+                        <select class="form-control" id="edit_role" name="role">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const userRows = document.querySelectorAll('.user-row');
+        userRows.forEach(row => {
+            row.addEventListener('click', function () {
+                window.location.href = row.getAttribute('data-url');
+            });
+        });
+
+        const editRoleButtons = document.querySelectorAll('.edit-role-btn');
+        editRoleButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();
+                const id = button.getAttribute('data-id');
+                const username = button.getAttribute('data-username');
+                const role = button.getAttribute('data-role');
+
+                const modal = new bootstrap.Modal(document.getElementById('editRoleModal'));
+                modal.show();
+
+                document.getElementById('edit_user_id').value = id;
+                document.getElementById('edit_username').value = username;
+                document.getElementById('edit_role').value = role;
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

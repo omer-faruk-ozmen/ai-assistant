@@ -1,0 +1,98 @@
+/* styles.css */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li {
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.success {
+    background-color: #28a745; /* Yeşil renk */
+}
+
+.warning {
+    background-color: #ffc107; /* Sarı renk */
+}
+
+.error {
+    background-color: #dc3545; /* Kırmızı renk */
+}
+
+.info {
+    background-color: #17a2b8; /* Mavi renk */
+}
+
+/* Genel stiller */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    height: 100vh;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+
+
+/* Mobil cihazlar için özel stiller */
+@media (max-width: 768px) {
+    .navbar {
+        width: 100%;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+    .table th, .table td {
+        padding: 0.25rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+        font-size: 0.875rem; /* Yazı boyutunu küçültme */
+    }
+
+    .table thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table tbody + tbody {
+        border-top: 2px solid #dee2e6;
+    }
+    
+    .btn {
+        font-size: 0.75rem; /* Buton yazı boyutunu küçültme */
+        padding: 0.25rem 0.5rem;
+    }
+}

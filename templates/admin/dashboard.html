@@ -1,0 +1,56 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block admin_content %}
+<style>
+    .list-group-item-primary {
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+.list-group-item-primary:hover {
+    background-color: #b8daff;
+    border-color: #7abaff;
+}
+
+.list-group-item-secondary {
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+}
+
+.list-group-item-secondary:hover {
+    background-color: #d6d8db;
+    border-color: #c6c8ca;
+}
+
+.list-group-item {
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.list-group-item:hover {
+    transform: scale(1.02);
+}
+
+</style>
+
+<div class="container-fluid">
+    <h2 class="mb-4">Admin Dashboard</h2>
+    <p class="lead">Admin paneline hoş geldiniz! Bu panel üzerinden çeşitli yönetim işlemlerini gerçekleştirebilirsiniz. Aşağıdaki bağlantılar aracılığıyla istediğiniz işlemleri yapabilirsiniz:</p>
+
+    <div class="list-group">
+        <a href="{{ url_for('app_bp.admin_bp.users') }}" class="list-group-item list-group-item-action list-group-item-primary">
+            <h5 class="mb-1">Kullanıcı Yönetimi</h5>
+            <p class="mb-1">Sistemde kayıtlı olan kullanıcıları görüntüleyebilir, rollerini düzenleyebilir veya kullanıcıları engelleyebilirsiniz.</p>
+            <small>Lütfen buraya tıklayın</small>
+        </a>
+        <a href="{{ url_for('app_bp.admin_bp.patients') }}" class="list-group-item list-group-item-action list-group-item-secondary">
+            <h5 class="mb-1">Hasta Yönetimi</h5>
+            <p class="mb-1">Sistemde kayıtlı olan hastaları görüntüleyebilir, bilgilerini güncelleyebilir veya silebilirsiniz.</p>
+            <small>Lütfen buraya tıklayın</small>
+        </a>
+        <!-- Daha fazla yönlendirme eklemek isterseniz, benzer bir yapı kullanabilirsiniz -->
+    </div>
+</div>
+{% endblock %}

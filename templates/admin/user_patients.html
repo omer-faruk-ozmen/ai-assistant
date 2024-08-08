@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Kullanıcı Hastaları{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <h2>Hastalar</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Protokol</th>
+                    <th>Alan</th>
+                    <th>Yaş</th>
+                    <th>Cinsiyet</th>
+                    <th>Şikayet</th>
+                    <th>Sonuç</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.protokol }}</td>
+                    <td>{{ patient.triaj }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.gender }}</td>
+                    <td>{{ patient.complaints }}</td>
+                    <td>{{ patient.conclusion.result if patient.conclusion else 'Sonuç yok' }}</td>
+                    <td><button class="btn btn-danger btn-sm delete-btn" data-id="{{ patient.id }}" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">
+                        <i class="fas fa-trash-alt"></i>
+                    </button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Hastayı Sil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="deleteForm" method="post" action="">
+                <div class="modal-body">
+                    <input type="hidden" id="patient_id" name="id" />
+                    <p>Bu hastayı silmek istediğinizden emin misiniz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();
+                const id = button.getAttribute('data-id');
+                const form = document.getElementById('deleteForm');
+                form.action = '{{ url_for("app_bp.patient_bp.delete_patient_route", id=0) }}'.replace('0', id);
+                const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                modal.show();
+                modal.querySelector('#patient_id').value = id;
+            });
+        });
+    });
+</script>
+
+{% endblock %}

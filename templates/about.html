@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Hakkımızda - Hastane Triage Yardımcısı{% endblock %}
+
+{% block content %}
+<div class="container-about mt-4">
+    <div class="jumbotron text-center bg-secondary text-white">
+        <h2>Hakkımızda</h2>
+    </div>
+    <p>Merhaba, bizler acil serviste yıllardır hizmet veren deneyimli bir ekip olarak, doktorların karşılaştıkları zorlukları ve hastalarımızın ihtiyaçlarını en iyi şekilde anlayan bir grup sağlık profesyoneliyiz. Özellikle acil servislerde yeni atanan doktorların karşılaştığı zorluklar ve periferde uzman doktorların bulunmaması durumunda yaşanan sıkıntılar bizlerin günlük olarak tanık olduğu durumlardır. Bu zorlukların üstesinden gelebilmek ve sağlık hizmetlerinin kalitesini artırmak amacıyla, yapay zeka destekli bir çözüm geliştirmeye karar verdik.</p>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title text-muted">Misyonumuz</h3>
+            <p class="card-text">Amacımız, acil servislerde çalışan doktorların ve diğer sağlık personelinin iş yükünü hafifletmek, tanı ve tedavi süreçlerini hızlandırmak ve hastalarımıza daha hızlı ve etkili bir şekilde hizmet verebilmektir. Özellikle yeni atanan doktorların karşılaştıkları tanı koyma ve müdahale süreçlerindeki belirsizlikleri azaltarak, onların daha güvenli ve etkin bir şekilde çalışabilmelerini sağlamak istiyoruz.</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title text-muted">Neden Yapay Zeka?</h3>
+            <p class="card-text">Yapay zeka teknolojisi, tıbbi verilerin analiz edilmesinde ve hızlı kararlar alınmasında benzersiz bir avantaj sağlar. Bizim yapay zeka modelimiz, hastaların anamnez bilgilerini analiz ederek olası hastalıkları belirler ve bu hastalıklar için gerekli olan tetkikleri ve müdahaleleri önerir. Bu sayede, doktorlarımıza kritik kararlar almalarında destek olur ve onların daha güvenli, etkili ve hızlı bir şekilde çalışabilmelerine yardımcı olur.</p>
+        </div>
+    </div>
+
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title text-muted">Doktorlar İçin Destek</h3>
+            <p class="card-text">Özellikle periferde çalışan ve yeni atanmış doktorlar için, doğru ve hızlı tanı koymak oldukça zorlayıcı olabilir. Yapay zeka modelimiz, bu doktorlar için bir rehber görevi görür ve onların karşılaştıkları zorlukları aşmalarına yardımcı olur. Tanı ve tedavi süreçlerinde güvenilir bir kaynak sunarak, onların daha emin adımlarla ilerlemelerini sağlar.</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title text-muted">Vizyonumuz</h3>
+            <p class="card-text">Gelecekte, yapay zeka destekli çözümlerimizin daha da gelişerek, sadece acil servislerde değil, tüm tıbbi alanlarda kullanılmasını hedefliyoruz. Amacımız, her doktorun ve sağlık personelinin yanında güçlü bir yardımcı olmak ve sağlık hizmetlerinin kalitesini dünya genelinde artırmaktır.</p>
+        </div>
+    </div>
+
+    <div class="card mt-4 mb-4">
+        <div class="card-body">
+            <h3 class="card-title text-muted">Sonuç</h3>
+            <p class="card-text">Bizler, sağlık sektöründe karşılaşılan zorlukları en iyi şekilde anlayan ve bu zorluklara yenilikçi çözümler sunmayı hedefleyen bir ekibiz. Yapay zeka destekli modelimizle, sağlık profesyonellerinin işini kolaylaştırmayı ve hastalarımıza daha hızlı, etkili ve güvenli bir hizmet sunmayı amaçlıyoruz. Sağlık hizmetlerinin geleceğine katkı sağlamak ve doktorlarımızın yanında güçlü bir destek olmak için çalışmaya devam edeceğiz.</p>
+            <p class="card-text">Eğer siz de bu yolculukta bizimle birlikte olmak ve yapay zeka destekli çözümlerimizden faydalanmak isterseniz, bizimle iletişime geçebilir veya hizmetlerimiz hakkında daha fazla bilgi almak için web sitemizi ziyaret edebilirsiniz.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-about {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .jumbotron {
+        background-color: #57787d;
+        color: #ffffff;
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .text-muted {
+        color: #46897f !important;
+    }
+
+    .card {
+        margin-top: 20px;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 1.1rem;
+        color: #495057;
+    }
+
+    p {
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+
+    h3 {
+        margin-top: 30px;
+        font-size: 1.75rem;
+    }
+</style>
+{% endblock %}
