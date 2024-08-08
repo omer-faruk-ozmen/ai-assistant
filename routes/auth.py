@@ -12,7 +12,6 @@ def register():
         data = request.form
         token, error = auth_register(data['username'], data['email'], data['password'])
         if error:
-            flash(error, 'danger')
             return jsonify({'success': False, 'error': error}), 400
         response = jsonify({'success': True, 'redirect_url': url_for('app_bp.main_bp.home')})
         set_access_cookies(response, token)

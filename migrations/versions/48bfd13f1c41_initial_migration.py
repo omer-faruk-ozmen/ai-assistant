@@ -1,8 +1,8 @@
-"""Init migration
+"""Initial migration
 
-Revision ID: 58eefb81af92
+Revision ID: 48bfd13f1c41
 Revises: 
-Create Date: 2024-07-01 00:46:09.455727
+Create Date: 2024-08-08 14:33:38.467612
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '58eefb81af92'
+revision = '48bfd13f1c41'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,11 +24,13 @@ def upgrade():
     sa.Column('email', sa.String(length=150), nullable=False),
     sa.Column('password', sa.String(length=200), nullable=False),
     sa.Column('role', sa.String(length=50), nullable=False),
+    sa.Column('is_blocked', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     op.create_table('patients',
+    sa.Column('protokol', sa.Integer(), nullable=False),
     sa.Column('age', sa.Integer(), nullable=False),
     sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('complaints', sa.Text(), nullable=False),
@@ -43,6 +45,8 @@ def upgrade():
     sa.Column('allergy_history', sa.Text(), nullable=True),
     sa.Column('surgical_history', sa.Text(), nullable=True),
     sa.Column('summary', sa.Text(), nullable=True),
+    sa.Column('service_coming', sa.Text(), nullable=True),
+    sa.Column('triaj', sa.Text(), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('ip_address', sa.String(length=50), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -53,9 +57,8 @@ def upgrade():
     op.create_table('conclusions',
     sa.Column('patient_id', sa.Integer(), nullable=False),
     sa.Column('triage_class', sa.String(length=50), nullable=False),
-    sa.Column('triage_code', sa.String(length=50), nullable=False),
     sa.Column('prompt', sa.Text(), nullable=False),
-    sa.Column('result', sa.Text(), nullable=False),
+    sa.Column('result', sa.Text(), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['patient_id'], ['patients.id'], ),
     sa.PrimaryKeyConstraint('id')
