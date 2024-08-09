@@ -78,9 +78,9 @@ def update_patient(patient_id, data):
     intervention_repo.delete_by_patient_id(patient_id)
 
     prompt = helpers.create_prompt(patient=patient)
-    response = helpers.generate_algorithms_with_ai(prompt=prompt)
+    response = helpers.generate_with_ai(prompt=prompt)
 
-    helpers.process_patient_data(patient_id=patient.id, response=response, prompt=prompt)
+    helpers.process_patient_dict_data(patient_id=patient.id, response=response, prompt=prompt)
 
     return patient
 

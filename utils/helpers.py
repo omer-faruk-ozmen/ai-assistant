@@ -165,24 +165,6 @@ def process_patient_dict_data(patient_id,response,prompt):
         intervention_repo.add(Intervention(patient_id=patient_id, intervention=treatment))
 
 
-def process_patient_data(patient_id,response,prompt):
-
-    data = json.loads(response)
-
-    triage_class = data['triage_class']
-    
-    conclusion_repo.add(Conclusion(patient_id=patient_id,triage_class=triage_class,prompt=prompt))
-    
-    for diag in data['pre_diag']:
-        diagnosis_repo.add(Diagnosis(patient_id=patient_id,diagnosis=diag))
-    
-    for exam in data['examination']:
-        examination_repo.add(Examination(patient_id=patient_id, examination=exam))
-
-    for treatment in data['treatment']:
-        intervention_repo.add(Intervention(patient_id=patient_id, intervention=treatment))
-
-
 def generate_excel(patients):
     data = []
     for patient in patients:
