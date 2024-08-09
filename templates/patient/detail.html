@@ -4,54 +4,54 @@
 <style>
   /* CSS kodlarınızı buraya yapıştırın */
   .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
   }
-  
+
   .card {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
   }
-  
+
   .detail-list {
-      padding-left: 0;
+    padding-left: 0;
   }
-  
+
   .detail-list .list-group-item {
-      border: none;
-      padding: 10px;
+    border: none;
+    padding: 10px;
   }
-  
+
   /* Heading styles */
   .patient-detail-heading {
-      font-size: 24px;
-      color: #3069a6;
+    font-size: 24px;
+    color: #3069a6;
   }
-  
+
   .detail-section-heading {
-      font-size: 20px;
-      color: #28a745;
+    font-size: 20px;
+    color: #28a745;
   }
-  
+
   /* Icon styles */
   .list-group-item i {
-      margin-right: 10px;
-      color: #007bff;
+    margin-right: 10px;
+    color: #007bff;
   }
-  
+
   /* Responsive styles */
   @media (max-width: 768px) {
-      .col-sm-6 {
-          flex-basis: 100%;
-          max-width: 100%;
-      }
+    .col-sm-6 {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
   }
-  </style>
-  
+</style>
+
 
 <div class="container patient-detail-container">
   <div class="mb-4">
@@ -67,27 +67,40 @@
       <div class="card">
         <ul class="detail-list list-group">
           <li class="list-group-item"><i class="fas fa-user"></i> <strong>Protokol:</strong> {{ patient.protokol }}</li>
-          <li class="list-group-item"><i class="fas fa-user"></i> <strong>Bulunduğu Triaj:</strong> {{ patient.triaj }}</li>
-          <li class="list-group-item"><i class="fas fa-user"></i> <strong>Yaş:</strong> {{ patient.age }}</li>
-          <li class="list-group-item"><i class="fas fa-venus-mars"></i> <strong>Cinsiyet:</strong> {{ patient.gender }}</li>
-          <li class="list-group-item"><i class="fas fa-comment"></i> <strong>Şikayetler:</strong> {{ patient.complaints }}</li>
-          <li class="list-group-item"><i class="fas fa-hourglass-half"></i> <strong>Süre:</strong> {{ patient.duration }}</li>
-          <li class="list-group-item"><i class="fas fa-tachometer-alt"></i> <strong>Tansiyon:</strong> {{ patient.blood_pressure }}</li>
+          <li class="list-group-item"><i class="fas fa-person-booth"></i> <strong>Bulunduğu Triaj:</strong> {{ patient.triaj }}
+          </li>
+          <li class="list-group-item"><i class="fas fa-cake-candles"></i> <strong>Yaş:</strong> {{ patient.age }}</li>
+          <li class="list-group-item"><i class="fas fa-venus-mars"></i> <strong>Cinsiyet:</strong> {{ patient.gender }}
+          </li>
+          <li class="list-group-item"><i class="fas fa-comment"></i> <strong>Şikayetler:</strong> {{ patient.complaints
+            }}</li>
+          <li class="list-group-item"><i class="fas fa-hourglass-half"></i> <strong>Süre:</strong> {{ patient.duration
+            }}</li>
+          <li class="list-group-item"><i class="fas fa-tachometer-alt"></i> <strong>Tansiyon:</strong> {{
+            patient.blood_pressure }}</li>
           <li class="list-group-item"><i class="fas fa-heartbeat"></i> <strong>Nabız:</strong> {{ patient.pulse }}</li>
-          <li class="list-group-item"><i class="fas fa-heartbeat"></i> <strong>Geliş Şekli:</strong> {{ patient.service_coming }}</li>
+          <li class="list-group-item"><i class="fas fa-heartbeat"></i> <strong>Geliş Şekli:</strong> {{
+            patient.service_coming }}</li>
         </ul>
       </div>
     </div>
     <div class="col-sm-6 mb-4">
       <div class="card">
         <ul class="detail-list list-group">
-          <li class="list-group-item"><i class="fas fa-lungs"></i> <strong>Solunum Hızı:</strong> {{ patient.respiratory_rate }}</li>
-          <li class="list-group-item"><i class="fas fa-thermometer-half"></i> <strong>Ateş:</strong> {{ patient.temperature }}</li>
-          <li class="list-group-item"><i class="fas fa-water"></i> <strong>Saturasyon:</strong> {{ patient.saturation }}</li>
-          <li class="list-group-item"><i class="fas fa-notes-medical"></i> <strong>Kronik Hastalıklar:</strong> {{ patient.chronic_diseases }}</li>
-          <li class="list-group-item"><i class="fas fa-pills"></i> <strong>İlaçlar:</strong> {{ patient.medications }}</li>
-          <li class="list-group-item"><i class="fas fa-allergies"></i> <strong>Alerji Geçmişi:</strong> {{ patient.allergy_history }}</li>
-          <li class="list-group-item"><i class="fas fa-user-md"></i> <strong>Ameliyat Geçmişi:</strong> {{ patient.surgical_history }}</li>
+          <li class="list-group-item"><i class="fas fa-lungs"></i> <strong>Solunum Hızı:</strong> {{
+            patient.respiratory_rate }}</li>
+          <li class="list-group-item"><i class="fas fa-thermometer-half"></i> <strong>Ateş:</strong> {{
+            patient.temperature }}</li>
+          <li class="list-group-item"><i class="fas fa-water"></i> <strong>Saturasyon:</strong> {{ patient.saturation }}
+          </li>
+          <li class="list-group-item"><i class="fas fa-notes-medical"></i> <strong>Kronik Hastalıklar:</strong> {{
+            patient.chronic_diseases }}</li>
+          <li class="list-group-item"><i class="fas fa-pills"></i> <strong>İlaçlar:</strong> {{ patient.medications }}
+          </li>
+          <li class="list-group-item"><i class="fas fa-allergies"></i> <strong>Alerji Geçmişi:</strong> {{
+            patient.allergy_history }}</li>
+          <li class="list-group-item"><i class="fas fa-user-md"></i> <strong>Ameliyat Geçmişi:</strong> {{
+            patient.surgical_history }}</li>
           <li class="list-group-item"><i class="fas fa-file-alt"></i> <strong>Özet:</strong> {{ patient.summary }}</li>
         </ul>
       </div>
@@ -125,11 +138,67 @@
   <div class="col-md-12">
     <h3>Diğer Bilgiler</h3>
     <ul class="detail-list list-group">
-      <li class="list-group-item"><i class="fas fa-lightbulb"></i> <strong>Prompt:</strong> {{ patient.conclusion.prompt }}</li>
-      <li class="list-group-item"><i class="fas fa-check"></i> <strong>Sonuç:</strong> {{ patient.conclusion.result }}</li>
-      <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <strong>Oluşturulma Tarihi:</strong> {{ patient.date }}</li>
+      <li class="list-group-item"><i class="fas fa-lightbulb"></i> <strong>Prompt:</strong> {{ patient.conclusion.prompt
+        }}</li>
+      <li class="list-group-item"><i class="fas fa-check"></i> <strong>Sonuç:</strong>
+
+        <td>{% if not patient.conclusion.result %}
+          <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal"
+            data-id="{{ patient.id }}">
+            Sonuç Ekle
+          </button>
+          {% else %}
+          {{ patient.conclusion.result }}
+          {% endif %}
+        </td>
+      </li>
+      <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <strong>Oluşturulma Tarihi:</strong> {{
+        patient.date }}</li>
     </ul>
   </div>
 </div>
 </div>
+
+<!-- Edit Result Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Sonuç Ekle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="editForm" method="post" action="">
+        <div class="modal-body">
+          <input type="hidden" id="edit_patient_id" name="id" />
+          <div class="form-group">
+            <label for="result">Sonuç:</label>
+            <input type="text" class="form-control" id="result" name="result" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+          <button type="submit" class="btn btn-primary">Ekle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+      button.addEventListener('click', function (event) {
+        event.stopPropagation();
+        const id = button.getAttribute('data-id');
+        const modal = new bootstrap.Modal(document.getElementById('editModal'));
+        document.getElementById('edit_patient_id').value = id;
+        document.querySelector('#editModal form').action = `/patient/edit-result/${id}`;
+        modal.show();
+      });
+    });
+  })
+</script>
 {% endblock %}

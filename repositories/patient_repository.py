@@ -29,9 +29,6 @@ class PatientRepository(BaseRepository):
             self.add(conclusion)
         return conclusion
 
-    def get_by_user_id(self, user_id):
-        return self.model.query.filter_by(user_id=user_id).all()
-
     def get_all_relationships(self, patient_id):
         patient = self.get_by_id(patient_id)
         
@@ -54,13 +51,14 @@ class PatientRepository(BaseRepository):
             patient.examinations = Examination.query.filter_by(patient_id=patient.id).all()
             patient.interventions = Intervention.query.filter_by(patient_id=patient.id).all()
 
+        patients.reverse()
         return patients
 
 
-    
-
     def get_by_user_id(self, user_id):
-        return self.model.query.filter_by(user_id=user_id).all()
+        patients = self.model.query.filter_by(user_id=user_id).all()
+        patients.reverse()
+        return patients
     
     def get_patient_count_by_user_id(self, user_id):
             return self.model.query.filter_by(user_id=user_id).count()

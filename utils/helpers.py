@@ -23,8 +23,6 @@ from repositories.request_repository import RequestRepository
 from services.api_service import ApiService
 
 load_dotenv()
-
-#client=OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 assistant_id = os.environ.get('OPENAI_ASSISTANT_ID')
 
 conclusion_repo = ConclusionRepository()
@@ -130,10 +128,9 @@ def check_thread_status(thread_id: str, run_id: str) -> Dict[str, Any]:
     while True:
         status_response = api_service.get_thread_status(thread_id, run_id)
         if status_response['status'] == 'completed':
-            # Mesajları al ve geri dön
             messages_response = api_service.get_thread_messages(thread_id)
             return messages_response
-        time.sleep(1)  # Durum kontrolü için bekle
+        time.sleep(1)
 
 def proccess_data(data):
     for message in data['data']:
