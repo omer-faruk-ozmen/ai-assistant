@@ -13,7 +13,6 @@ admin_bp = Blueprint('admin_bp', __name__)
 @jwt_required()
 @role_required('admin')
 def dashboard():
-    
     return render_template('admin/dashboard.html')
 
 

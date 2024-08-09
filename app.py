@@ -62,7 +62,6 @@ def create_app():
     def expired_token_callback(header, payload):
         flash("Oturum süreniz doldu. Lütfen tekrar giriş yapın.", "info")
         return redirect(url_for('app_bp.auth_bp.login'))
-
     return app
 
 if __name__ == '__main__':

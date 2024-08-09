@@ -1,6 +1,6 @@
 from functools import wraps
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
-from flask import jsonify
+from flask import flash, jsonify, redirect, url_for
 
 def jwt_required_with_redirect(fn):
     @wraps(fn)
@@ -19,7 +19,8 @@ def role_required(role):
             verify_jwt_in_request()
             claims = get_jwt_identity()
             if claims['role'] != role:
-                return jsonify(msg="Unauthorized"), 403
+                flash("Bu sayfaya erişmek için yetkiniz yok.", "info")
+                return redirect(url_for('app_bp.main_bp.home'))
             return fn(*args, **kwargs)
         return decorator
     return wrapper
