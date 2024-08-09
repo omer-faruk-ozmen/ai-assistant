@@ -44,18 +44,7 @@ def get_current_user():
         return User.query.get(user_identity['id'])
     return 'Unknown'
 def create_prompt(patient):
-    """Create a prompt for AI processing based on patient data."""
-    prompt = 'This GPT is designed to support the triage process in the emergency department setting. '
-    prompt += 'The goal is to determine in which area '
-    prompt += '(Yeşil, Sarı, or Kırmızı) the patient should be seen in the ED and provide only the triage '
-    prompt += 'result ("Yeşil", "Sarı", or "Kırmızı"). It then lists in JSON format the maximum 10 possible '
-    prompt += 'preliminary diagnoses for this patient, the maximum 10 tests that should be ordered, '
-    prompt += 'and the maximum 10 treatment recommendations that should be started, ranked from most '
-    prompt += 'likely to least likely. The response format is concise, including the triage result '
-    prompt += 'and the ranked preliminary diagnoses. GPT helps perform fast and effective triage '
-    prompt += 'in the emergency department environment by carefully evaluating the patient information provided. '
-    prompt += 'Example return result(Keys in English, values in Turkish): { "triage_class": "Triyaj sonucu", "pre_diag": ["Ön tanı 1", "Ön tanı 2", "Ön tanı 3"], "examination": ["Tetkik 1", "Tetkik 2", "Tetkik 3"], "treatment": ["Tedavi 1", "Tedavi 2", "Tedavi 3"],"success":True or False (If you think the values ​​are written correctly, write the success value as true. If you think there is an error in the return json format, write the success value as false.)} '
-    prompt += "Patient information:"
+    prompt = "Patient information:"
 
     if patient.age:
         prompt += f" Age: {patient.age},"

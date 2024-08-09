@@ -20,7 +20,10 @@
         Daha önce eklenmiş hasta bulunamadı. Hasta eklemek için lütfen <a href="{{ url_for('app_bp.patient_bp.create_patient_route') }}" class="alert-link">buraya</a> tıklayın.
     </div>
     {% else %}
-    <h2>Hastalar</h2>
+    <div class="d-flex justify-content-between align-items-end">
+        <h2>Hastalar</h2>
+        <h5>Eklenen Hastalar: {{patients|length}}</h5>
+    </div>
     <div class="table-responsive">
         <table class="table">
             <thead>

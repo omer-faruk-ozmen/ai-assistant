@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 
 from services.admin_service import get_all_patients_with_relationships_admin
 from services.patient_service import delete_patient_with_relationships, get_patients_by_user_id
-from services.user_service import block_user, get_all_users, unblock_user, update_user_role_service
+from services.user_service import block_user, get_all_users, get_user_by_id, unblock_user, update_user_role_service
 from utils.decorators import role_required
 from utils.helpers import generate_excel
 
@@ -29,7 +29,8 @@ def patients():
 @role_required('admin')
 def user_patients(user_id):
     patients = get_patients_by_user_id(user_id)
-    return render_template('admin/user_patients.html', patients=patients)
+    user = get_user_by_id(user_id)
+    return render_template('admin/user_patients.html', patients=patients,user=user)
 
 @admin_bp.route('/users')
 @jwt_required()

@@ -12,6 +12,11 @@ class UserRepository(BaseRepository):
     def update(self, entity):
         super().update(entity)
 
+    def get_user_by_id(self,user_id):
+        user = self.get_by_id(user_id)
+        if user:
+            return user
+        return None
 
     def block_user(self, user_id):
         user = self.get_by_id(user_id)

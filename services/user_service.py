@@ -35,6 +35,8 @@ def unblock_user(user_id):
 def change_password(user_id, new_password):
     return user_repo.change_password(user_id, new_password)
 
+def get_user_by_id(user_id):
+    return user_repo.get_user_by_id(user_id)
 
 def get_current_user_service():
     user_id = get_jwt_identity()['id']
