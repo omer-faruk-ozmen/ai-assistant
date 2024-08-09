@@ -3,7 +3,12 @@
 {% block title %}Hasta Ekle{% endblock %}
 
 {% block content %}
-
+<style>
+    .patient-row {
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+</style>
 <div class="container mt-4">
     <div class="mb-3">
         <a href="{{ url_for('app_bp.patient_bp.create_patient_route') }}" class="btn btn-primary">Hasta Ekle</a>
