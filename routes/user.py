@@ -23,7 +23,7 @@ def settings():
 
         if new_password != confirm_password:
             flash('Yeni şifre ve onay şifresi eşleşmiyor.', 'danger')
-            return redirect(url_for('user_bp.settings'))
+            return redirect(url_for('app_bp.user_bp.settings'))
 
         
         current_user = get_current_user_service()
