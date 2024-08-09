@@ -174,7 +174,7 @@ def generate_excel(patients):
         data.append({
             "Protokol": patient.protokol,
             "Tarih": patient.date,
-            "Oluşturan": patient.user.username,
+            "Kullanıcı": patient.user.username if patient.user else "Bilinmiyor",
             "IP Adresi": patient.ip_address,
             "Triaj": patient.triaj,
             "Yapay Zeka Triaj": patient.conclusion.triage_class if patient.conclusion else "YOK",
@@ -193,7 +193,6 @@ def generate_excel(patients):
             "Cerrahi Geçmiş": patient.surgical_history,
             "Özet": patient.summary,
             "Geliş Tipi":patient.service_coming,
-            "Kullanıcı": patient.user.username if patient.user else "Bilinmiyor",
             "Sonuç": conclusion_result,
             "Tanılar": diagnoses,
             "Tetkikler": examinations,
