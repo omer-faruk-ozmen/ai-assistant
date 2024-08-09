@@ -3,8 +3,13 @@
 {% block title %}Kullanıcılar{% endblock %}
 
 {% block admin_content %}
-
+<style>
+    .user-row {
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
 </style>
+
 <div class="container-fluid">
     <h2>Kullanıcılar</h2>
     <div class="table-responsive">
@@ -20,22 +25,26 @@
             </thead>
             <tbody>
                 {% for user in users %}
-                <tr class="user-row {{ 'table-danger' if user.is_blocked else '' }}" data-url="{{ url_for('app_bp.admin_bp.user_patients', user_id=user.id) }}">
+                <tr class="user-row {{ 'table-danger' if user.is_blocked else '' }}"
+                    data-url="{{ url_for('app_bp.admin_bp.user_patients', user_id=user.id) }}">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{user.patient_count}}</td>
-                    <td>{{ user.role }} 
-                        <button class="btn btn-warning btn-sm edit-role-btn" data-id="{{ user.id }}" data-username="{{ user.username }}" data-role="{{ user.role }}">
+                    <td>{{ user.role }}
+                        <button class="btn btn-warning btn-sm edit-role-btn" data-id="{{ user.id }}"
+                            data-username="{{ user.username }}" data-role="{{ user.role }}">
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
                     <td>
                         {% if user.is_blocked %}
-                        <form action="{{ url_for('app_bp.admin_bp.unblock_user_route', user_id=user.id) }}" method="post" style="display:inline;">
+                        <form action="{{ url_for('app_bp.admin_bp.unblock_user_route', user_id=user.id) }}"
+                            method="post" style="display:inline;">
                             <button type="submit" class="btn btn-warning btn-sm">Engeli Kaldır</button>
                         </form>
                         {% else %}
-                        <form action="{{ url_for('app_bp.admin_bp.block_user_route', user_id=user.id) }}" method="post" style="display:inline;">
+                        <form action="{{ url_for('app_bp.admin_bp.block_user_route', user_id=user.id) }}" method="post"
+                            style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Engelle</button>
                         </form>
                         {% endif %}
@@ -48,7 +57,8 @@
 </div>
 
 <!-- Edit Role Modal -->
-<div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

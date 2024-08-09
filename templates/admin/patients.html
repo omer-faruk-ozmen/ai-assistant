@@ -4,6 +4,13 @@
 
 {% block admin_content %}
 
+<style>
+    .patient-row {
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+</style>
+
 <div class="container mt-4">
     <div class="mb-3">
         <a href="{{ url_for('app_bp.admin_bp.download_excel') }}" class="btn btn-success">Download <i class="fa-solid fa-file-excel"></i></a>
