@@ -17,7 +17,7 @@ Projenin çalıştırılması için gerekli adımlar aşağıda listelenmiştir.
 Öncelikle, projeyi yerel makinenize klonlayın:
 
 ```bash
-git clone https://github.com/kullanici_adi/proje_adi.git
+git clone https://github.com/omer-faruk-ozmen/ai-assistant.git
 cd proje_adi
 ```
 ### 2. Sanal Ortamı Oluşturun ve Gerekli Paketleri Yükleyin
