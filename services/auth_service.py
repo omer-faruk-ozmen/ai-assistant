@@ -1,3 +1,4 @@
+import re
 from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request
 from flask import jsonify
 from models import User,db
@@ -15,6 +16,12 @@ def auth_register(username, email, password):
     existing_user = User.query.filter((User.email == email) | (User.username == username)).first()
     if existing_user:
         return None, "E-posta veya kullanıcı adı zaten mevcut"
+    
+    verify_username = re.match("^[a-zA-Z0-9]+$", username)
+
+    if not verify_username :
+        return None,"Kullanıcı adı uygun değil! Sadece harf, rakam barındırabilir ve boşluk bulunmamalı."
+        
     
     new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
