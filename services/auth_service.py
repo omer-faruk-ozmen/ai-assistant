@@ -30,7 +30,11 @@ def auth_register(username, email, password):
     return token, None
 
 def auth_login(username_or_email, password):
-    user = User.query.filter((User.email == username_or_email) | (User.username == username_or_email)).first()
+    username_or_email = username_or_email.lower()
+    user = User.query.filter(
+        (User.email.ilike(username_or_email)) | 
+        (User.username.ilike(username_or_email))
+    ).first()
     if not user:
         return None, "Kullanıcı bulunamadı veya şifre yanlış!"
     if not user.check_password(password):
