@@ -1,160 +1,275 @@
-{% extends "admin/base.html" %}
-
-{% block title %}Admin Paneli - Hasta Listesi{% endblock %}
-
-{% block admin_content %}
+{% extends "admin/base.html" %} {% block title %}Admin Paneli - Hasta Listesi{%
+endblock %} {% block admin_content %}
 
 <style>
-    .patient-row {
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-    }
+  .patient-row {
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
 </style>
 
 <div class="container mt-4">
-    <div class="mb-3">
-        <a href="{{ url_for('app_bp.admin_bp.download_excel') }}" class="btn btn-success">Download <i class="fa-solid fa-file-excel"></i></a>
-    </div>
-    {% if patients|length == 0 %}
-    <div class="alert alert-info" role="alert">
-        Daha önce eklenmiş hasta bulunamadı. Hasta eklemek için lütfen <a href="{{ url_for('app_bp.patient_bp.create_patient_route') }}" class="alert-link">buraya</a> tıklayın.
-    </div>
-    {% else %}
-    <div class="d-flex justify-content-between align-items-end">
-        <h2>Hastalar</h2>
-        <h5>Eklenen Hastalar: {{patients|length}}</h5>
-    </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Protokol</th>
-                    <th>Alan</th>
-                    <th>Şikayet</th>
-                    <th>Oluşturan</th>
-                    <th>Tarih</th>
-                    <th>Sonuç</th>
-                    <th>Eylem</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for patient in patients %}
-                <tr class="patient-row" data-url="{{ url_for('app_bp.patient_bp.get_patient_route', id=patient.id) }}">
-                    <td>{{ patient.protokol }}</td>
-                    <td>{{ patient.triaj }}</td>
-                    <td>{{ patient.complaints }}</td>
-                    <td>{{patient.user.username}}</td>
-                    <td>{{ patient.date.strftime('%d-%m-%Y %H:%M')}}</td>
-                    <td>{% if not patient.conclusion.result %}
-                        <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal"
-                            data-bs-target="#editModal" data-id="{{ patient.id }}">
-                            Sonuç Ekle
-                        </button>
-                        {% else %}
-                        {{ patient.conclusion.result }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ url_for('app_bp.patient_bp.update_patient_route', id=patient.id) }}"
-                            class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ patient.id }}" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
+  <div class="mb-3">
+    <a
+      href="{{ url_for('app_bp.admin_bp.download_excel') }}"
+      class="btn btn-success"
+      >Download <i class="fa-solid fa-file-excel"></i
+    ></a>
+  </div>
+  {% if patients|length == 0 %}
+  <div class="alert alert-info" role="alert">
+    Daha önce eklenmiş hasta bulunamadı. Hasta eklemek için lütfen
+    <a
+      href="{{ url_for('app_bp.patient_bp.create_patient_route') }}"
+      class="alert-link"
+      >buraya</a
+    >
+    tıklayın.
+  </div>
+  {% else %}
+  <div class="d-flex justify-content-between align-items-end">
+    <h2>Hastalar</h2>
+    <h5>Toplam: {{pagination.total}}</h5>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Protokol</th>
+          <th>Alan</th>
+          <th>Şikayet</th>
+          <th>Oluşturan</th>
+          <th>Tarih</th>
+          <th>Sonuç</th>
+          <th>Eylem</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for patient in patients %}
+        <tr
+          class="patient-row"
+          data-url="{{ url_for('app_bp.patient_bp.get_patient_route', id=patient.id) }}"
+        >
+          <td>{{ patient.protokol }}</td>
+          <td>{{ patient.triaj }}</td>
+          <td>
+            {% if patient.complaints|length > 25 %} {{ patient.complaints[:25]
+            }}... {% else %} {{ patient.complaints }} {% endif %}
+          </td>
+          <td>{{patient.user.username}}</td>
+          <td>{{ patient.date.strftime('%d-%m-%Y %H:%M')}}</td>
+          <td>
+            {% if not patient.conclusion.result %}
+            <button
+              class="btn btn-primary btn-sm edit-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#editModal"
+              data-id="{{ patient.id }}"
+            >
+              Sonuç Ekle
+            </button>
+            {% else %} {{ patient.conclusion.result }} {% endif %}
+          </td>
+          <td>
+            <a
+              href="{{ url_for('app_bp.patient_bp.update_patient_route', id=patient.id) }}"
+              class="btn btn-warning btn-sm"
+            >
+              <i class="fas fa-edit"></i>
+            </a>
+            <button
+              class="btn btn-danger btn-sm delete-btn"
+              data-id="{{ patient.id }}"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteModal"
+            >
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <!-- Pagination Controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if pagination.has_prev %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.prev_num) }}"
+          >Önceki</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Önceki</span>
+      </li>
+      {% endif %} {% for page_num in pagination.iter_pages() %} {% if page_num
+      %} {% if page_num == pagination.page %}
+      <li class="page-item active">
+        <span class="page-link">{{ page_num }}</span>
+      </li>
+      {% else %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="{{ url_for('app_bp.admin_bp.patients', page=page_num) }}"
+          >{{ page_num }}</a
+        >
+      </li>
+      {% endif %} {% else %}
+      <li class="page-item disabled"><span class="page-link">...</span></li>
+      {% endif %} {% endfor %} {% if pagination.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.next_num) }}"
+          >Sonraki</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Sonraki</span>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
 </div>
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Hastayı Sil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="deleteForm" method="post" action="">
-                <div class="modal-body">
-                    <input type="hidden" id="patient_id" name="id" />
-                    <p>Bu hastayı silmek istediğinizden emin misiniz?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-danger">Sil</button>
-                </div>
-            </form>
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Hastayı Sil</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form id="deleteForm" method="post" action="">
+        <div class="modal-body">
+          <input type="hidden" id="patient_id" name="id" />
+          <p>Bu hastayı silmek istediğinizden emin misiniz?</p>
         </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            İptal
+          </button>
+          <button type="submit" class="btn btn-danger">Sil</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <!-- Edit Result Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Sonuç Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post" action="">
-                <div class="modal-body">
-                    <input type="hidden" id="edit_patient_id" name="id" />
-                    <div class="form-group">
-                        <label for="result">Sonuç:</label>
-                        <input type="text" class="form-control" id="result" name="result" required />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Ekle</button>
-                </div>
-            </form>
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Sonuç Ekle</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form method="post" action="">
+        <div class="modal-body">
+          <input type="hidden" id="edit_patient_id" name="id" />
+          <div class="form-group">
+            <label for="result">Sonuç:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="result"
+              name="result"
+              required
+            />
+          </div>
         </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            İptal
+          </button>
+          <button type="submit" class="btn btn-primary">Ekle</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const rows = document.querySelectorAll('.patient-row');
-        rows.forEach(row => {
-            row.addEventListener('click', function () {
-                window.location.href = row.getAttribute('data-url');
-            });
-        });
-
-        const editButtons = document.querySelectorAll('.edit-btn');
-        editButtons.forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation();
-                const id = button.getAttribute('data-id');
-                const modal = new bootstrap.Modal(document.getElementById('editModal'));
-                modal.show();
-                document.getElementById('edit_patient_id').value = id;
-                document.querySelector('#editModal form').action = `/patient/edit/${id}`;
-            });
-        });
-
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation();
-                const id = button.getAttribute('data-id');
-                const form = document.getElementById('deleteForm');
-                form.action = '{{ url_for("app_bp.admin_bp.delete_patient_route", id=0) }}'.replace('0', id);
-                const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-                modal.show();
-                modal.querySelector('#patient_id').value = id;
-            });
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".patient-row");
+    rows.forEach((row) => {
+      row.addEventListener("click", function () {
+        window.location.href = row.getAttribute("data-url");
+      });
     });
-    
+
+    const editButtons = document.querySelectorAll(".edit-btn");
+    editButtons.forEach((button) => {
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const id = button.getAttribute("data-id");
+        const modal = new bootstrap.Modal(document.getElementById("editModal"));
+        modal.show();
+        document.getElementById("edit_patient_id").value = id;
+        document.querySelector(
+          "#editModal form"
+        ).action = `/patient/edit/${id}`;
+      });
+    });
+
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const id = button.getAttribute("data-id");
+        const form = document.getElementById("deleteForm");
+        form.action =
+          '{{ url_for("app_bp.admin_bp.delete_patient_route", id=0) }}'.replace(
+            "0",
+            id
+          );
+        const modal = new bootstrap.Modal(
+          document.getElementById("deleteModal")
+        );
+        modal.show();
+        modal.querySelector("#patient_id").value = id;
+      });
+    });
+  });
 </script>
 
 {% endblock %}

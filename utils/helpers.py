@@ -38,9 +38,6 @@ def get_client_ip():
 def get_current_user():
     user_identity = get_jwt_identity()
     if user_identity:
-        print("get current user")
-        print(user_identity)
-        print(User.query.get(user_identity['id']))
         return User.query.get(user_identity['id'])
     return 'Unknown'
 def create_prompt(patient):

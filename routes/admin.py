@@ -1,7 +1,7 @@
-from flask import Blueprint, flash, jsonify, redirect, render_template, request, send_file, url_for
+from flask import Blueprint, flash, redirect, render_template, request, send_file, url_for
 from flask_jwt_extended import jwt_required
 
-from services.admin_service import get_all_patients_with_relationships_admin
+from services.admin_service import get_all_patients_with_relationships_admin, get_all_patients_with_relationships_paginate_admin
 from services.patient_service import delete_patient_with_relationships, get_patients_by_user_id
 from services.user_service import block_user, get_all_users, get_user_by_id, unblock_user, update_user_role_service
 from utils.decorators import role_required
@@ -15,13 +15,15 @@ admin_bp = Blueprint('admin_bp', __name__)
 def dashboard():
     return render_template('admin/dashboard.html')
 
-
 @admin_bp.route('/patients', methods=['GET'])
 @jwt_required()
 @role_required('admin')
 def patients():
-    patients = get_all_patients_with_relationships_admin()
-    return render_template('admin/patients.html',patients=patients)
+    page = request.args.get('page',1,type=int)
+    per_page = 20
+    pagination = get_all_patients_with_relationships_paginate_admin(page,per_page)
+    patients = pagination.items
+    return render_template('admin/patients.html',patients=patients,pagination=pagination)
 
 @admin_bp.route('/users/patients/<int:user_id>', methods=['GET'])
 @jwt_required()

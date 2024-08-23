@@ -1,71 +1,103 @@
-{% extends "base.html" %}
-
-{% block title %}Home - My Application{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}AI Assistant - Home{% endblock %} {%
+block content %}
 <div class="container mt-4">
-    <h2 class="text-primary">Hoş geldiniz, {{current_username}}!</h2>
-    <p class="lead">AI Assistant uygulamasına hoş geldiniz! Bu platform, yapay zeka yardımıyla hastaların tıbbi verilerini analiz ederek sağlık profesyonellerine destek olan gelişmiş bir sistemdir.</p>
-    <p class="mb-1">Aşağıda, sistemin sunduğu bazı önemli özellikleri ve gerçekleştirebileceğiniz işlemleri bulabilirsiniz:</p>
+  <h2 class="text-primary">Hoş geldiniz, {{current_username}}!</h2>
+  <p class="lead">
+    AI Assistant uygulamasına hoş geldiniz! Bu platform, yapay zeka yardımıyla
+    hastaların tıbbi verilerini analiz ederek sağlık profesyonellerine destek
+    olan gelişmiş bir sistemdir.
+  </p>
+  <p class="mb-1">
+    Aşağıda, sistemin sunduğu bazı önemli özellikleri ve
+    gerçekleştirebileceğiniz işlemleri bulabilirsiniz:
+  </p>
 
-    <div class="list-group mt-4">
-        <a href="{{ url_for('app_bp.patient_bp.create_patient_route') }}" class="list-group-item list-group-item-action">
-            <h5 class="mb-1"><i class="fas fa-user-plus text-success"></i> Yeni Hasta Ekle</h5>
-            <p class="mb-1">Sisteme yeni bir hasta ekleyin ve yapay zeka yardımıyla hastanızı sınıflandırın. Yapay zeka, önerdiği ön tanıları, tetkikleri ve müdahale algoritmalarını listelemenize yardımcı olur.</p>
-            <small class="text-muted">Yeni hasta eklemek için lütfen tıklayın</small>
-        </a>
-        <a href="{{ url_for('app_bp.patient_bp.list_patients_route') }}" class="list-group-item list-group-item-action">
-            <h5 class="mb-1"><i class="fas fa-list text-info"></i> Hasta Listesi</h5>
-            <p class="mb-1">Mevcut hastaları görüntüleyebilir, bilgilerini güncelleyebilir veya silebilirsiniz. Hastalarınızı kolayca yönetin.</p>
-            <small class="text-muted">Eklediğiniz hastaları listelemek, güncellemek veya silmek için lütfen tıklayın</small>
-        </a>
-        {% if current_role == 'admin' %}
-        <a href="{{ url_for('app_bp.admin_bp.dashboard') }}" class="list-group-item list-group-item-action">
-            <h5 class="mb-1"><i class="fas fa-user-shield text-danger"></i> Admin Paneli</h5>
-            <p class="mb-1">Sistemdeki kullanıcıları ve hastaları yönetin. Admin paneli sayesinde sistemin tüm kontrolü elinizde.</p>
-            <small class="text-muted">Admin paneline geçiş yapmak için lütfen tıklayın</small>
-        </a>
-        {% endif %}
-    </div>
+  <div class="list-group mt-4">
+    <a
+      href="{{ url_for('app_bp.patient_bp.create_patient_route') }}"
+      class="list-group-item list-group-item-action"
+    >
+      <h5 class="mb-1">
+        <i class="fas fa-user-plus text-success"></i> Yeni Hasta Ekle
+      </h5>
+      <p class="mb-1">
+        Sisteme yeni bir hasta ekleyin ve yapay zeka yardımıyla hastanızı
+        sınıflandırın. Yapay zeka, önerdiği ön tanıları, tetkikleri ve müdahale
+        algoritmalarını listelemenize yardımcı olur.
+      </p>
+      <small class="text-muted">Yeni hasta eklemek için lütfen tıklayın</small>
+    </a>
+    <a
+      href="{{ url_for('app_bp.patient_bp.list_patients_route') }}"
+      class="list-group-item list-group-item-action"
+    >
+      <h5 class="mb-1"><i class="fas fa-list text-info"></i> Hasta Listesi</h5>
+      <p class="mb-1">
+        Mevcut hastaları görüntüleyebilir, bilgilerini güncelleyebilir veya
+        silebilirsiniz. Hastalarınızı kolayca yönetin.
+      </p>
+      <small class="text-muted"
+        >Eklediğiniz hastaları listelemek, güncellemek veya silmek için lütfen
+        tıklayın</small
+      >
+    </a>
+    {% if current_role == 'admin' %}
+    <a
+      href="{{ url_for('app_bp.admin_bp.dashboard') }}"
+      class="list-group-item list-group-item-action"
+    >
+      <h5 class="mb-1">
+        <i class="fas fa-user-shield text-danger"></i> Admin Paneli
+      </h5>
+      <p class="mb-1">
+        Sistemdeki kullanıcıları ve hastaları yönetin. Admin paneli sayesinde
+        sistemin tüm kontrolü elinizde.
+      </p>
+      <small class="text-muted"
+        >Admin paneline geçiş yapmak için lütfen tıklayın</small
+      >
+    </a>
+    {% endif %}
+  </div>
 </div>
 
 <style>
-    .container-fluid {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-    }
+  .container-fluid {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
 
-    .text-primary {
-        color: #1ba663 !important;
-    }
+  .text-primary {
+    color: #1ba663 !important;
+  }
 
-    .list-group-item {
-        background-color: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
+  .list-group-item {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
 
-    .list-group-item:hover {
-        background-color: #e9ecef;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+  .list-group-item:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
-    .list-group-item h5 {
-        color: #343a40;
-    }
+  .list-group-item h5 {
+    color: #343a40;
+  }
 
-    .list-group-item p {
-        color: #6c757d;
-    }
+  .list-group-item p {
+    color: #6c757d;
+  }
 
-    .list-group-item small {
-        color: #007bff;
-    }
+  .list-group-item small {
+    color: #007bff;
+  }
 
-    .list-group-item i {
-        margin-right: 10px;
-    }
+  .list-group-item i {
+    margin-right: 10px;
+  }
 </style>
 {% endblock %}

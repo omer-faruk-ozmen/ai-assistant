@@ -142,63 +142,14 @@
         }}</li>
       <li class="list-group-item"><i class="fas fa-check"></i> <strong>Sonuç:</strong>
 
-        <td>{% if not patient.conclusion.result %}
-          <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal"
-            data-id="{{ patient.id }}">
-            Sonuç Ekle
-          </button>
-          {% else %}
+        <td>
           {{ patient.conclusion.result }}
-          {% endif %}
         </td>
       </li>
-      <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <strong>Oluşturulma Tarihi:</strong> {{
-        patient.date }}</li>
+      <li class="list-group-item"><i class="fas fa-calendar-alt"></i> <strong>Oluşturulma Tarihi:</strong> {{ patient.date.strftime('%d-%m-%Y %H:%M')}}</li>
     </ul>
   </div>
 </div>
 </div>
 
-<!-- Edit Result Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Sonuç Ekle</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="editForm" method="post" action="">
-        <div class="modal-body">
-          <input type="hidden" id="edit_patient_id" name="id" />
-          <div class="form-group">
-            <label for="result">Sonuç:</label>
-            <input type="text" class="form-control" id="result" name="result" required />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-          <button type="submit" class="btn btn-primary">Ekle</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const editButtons = document.querySelectorAll('.edit-btn');
-    editButtons.forEach(button => {
-      button.addEventListener('click', function (event) {
-        event.stopPropagation();
-        const id = button.getAttribute('data-id');
-        const modal = new bootstrap.Modal(document.getElementById('editModal'));
-        document.getElementById('edit_patient_id').value = id;
-        document.querySelector('#editModal form').action = `/patient/edit-result/${id}`;
-        modal.show();
-      });
-    });
-  })
-</script>
 {% endblock %}
