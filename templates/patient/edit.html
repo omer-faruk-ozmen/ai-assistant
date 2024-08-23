@@ -61,7 +61,12 @@
                 </div>
                 <div class="form-group">
                     <label for="triaj"><i class="fas fa-file-alt"></i> Triaj:</label>
-                    <input type="text" class="form-control" name="triaj" id="triaj" value="{{patient.triaj}}">
+                    <select class="form-control" id="triaj" name="triaj">
+                        <option selected disabled>{{patient.triaj}}</option>
+                        <option value="Yeşil">Yeşil</option>
+                        <option value="Sarı">Sarı</option>
+                        <option value="Kırmızı">Kırmızı</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm">
@@ -108,14 +113,15 @@
                         <option value="Sevk" {% if patient.service_coming=='sevk' %}selected{% endif %}>Sevk</option>
                     </select>
                 </div>
+
+                <div class="col mt-5 mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Güncelle <i
+                            class="fas fa-chevron-circle-right"></i></button>
+                </div>
+
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-4">
-                <button type="submit" class="btn btn-primary btn-block">Güncelle <i
-                        class="fas fa-chevron-circle-right"></i></button>
-            </div>
-        </div>
+
     </form>
 </div>
 {% endblock %}

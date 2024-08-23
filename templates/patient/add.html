@@ -1,112 +1,212 @@
-{% extends "base.html" %}
-
-{% block title %}Hasta Ekle{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Hasta Ekle{% endblock %} {% block
+content %}
 <div class="container">
-    <h2 class="my-4">Hasta Ekle</h2>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert-container">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <form action="{{ url_for('app_bp.patient_bp.create_patient_route') }}" method="post">
-        <div class="row">
-            <div class="col-sm">
-                <div class="form-group">
-                    <label for="protokol"><i class="fas fa-birthday-cake"></i> Protokol:</label>
-                    <input type="number" autocomplete="off" class="form-control" name="protokol" id="protokol" required>
-                </div>
-                <div class="form-group">
-                    <label for="age"><i class="fas fa-birthday-cake"></i> Yaş:</label>
-                    <input type="number" autocomplete="off" class="form-control" name="age" id="age" required>
-                </div>
-                <div class="form-group">
-                    <label for="gender"><i class="fas fa-venus-mars"></i> Cinsiyet:</label>
-                    <select class="form-control" id="gender" name="gender" >
-                        <option selected disabled>Lütfen seçim yapın</option>
-                        <option value="Erkek">Erkek</option>
-                        <option value="Kadın">Kadın</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="complaints"><i class="fas fa-heartbeat"></i> Şikayetler:</label>
-                    <input type="text" class="form-control" name="complaints" id="complaints" required>
-                </div>
-                <div class="form-group">
-                    <label for="duration"><i class="far fa-clock"></i> Şikayet Süresi:</label>
-                    <input type="text" class="form-control" name="duration" id="duration" required>
-                </div>
-                <div class="form-group">
-                    <label for="bloodPressure"><i class="fas fa-tachometer-alt"></i> Kan Basıncı:</label>
-                    <input type="text" class="form-control" name="bloodPressure" id="bloodPressure">
-                </div>
-                <div class="form-group">
-                    <label for="pulse"><i class="fas fa-heart"></i> Nabız:</label>
-                    <input type="text" class="form-control" name="pulse" id="pulse">
-                </div>
-                <div class="form-group">
-                    <label for="respiratoryRate"><i class="fas fa-lungs"></i> Solunum Hızı:</label>
-                    <input type="text" class="form-control" name="respiratoryRate" id="respiratoryRate">
-                </div>
-                <div class="form-group">
-                    <label for="triaj"><i class="fas fa-file-alt"></i> Triaj:</label>
-                    <input type="text" class="form-control" name="triaj" id="triaj">
-                </div>
-            </div>
-            <div class="col-sm">
-                <div class="form-group">
-                    <label for="temperature"><i class="fas fa-thermometer-half"></i> Vücut Sıcaklığı:</label>
-                    <input type="text" class="form-control" name="temperature" id="temperature">
-                </div>
-                <div class="form-group">
-                    <label for="saturation"><i class="fas fa-water"></i> Oksijen Satürasyonu:</label>
-                    <input type="text" class="form-control" name="saturation" id="saturation">
-                </div>
-                <div class="form-group">
-                    <label for="chronicDiseases"><i class="fas fa-notes-medical"></i> Kronik Hastalıklar Listesi:</label>
-                    <input type="text" class="form-control" name="chronicDiseases" id="chronicDiseases">
-                </div>
-                <div class="form-group">
-                    <label for="medications"><i class="fas fa-pills"></i> Kullanılan İlaçlar:</label>
-                    <input type="text" class="form-control" name="medications" id="medications">
-                </div>
-                <div class="form-group">
-                    <label for="allergyHistory"><i class="fas fa-allergies"></i> Alerji Geçmişi:</label>
-                    <input type="text" class="form-control" name="allergyHistory" id="allergyHistory">
-                </div>
-                <div class="form-group">
-                    <label for="surgicalHistory"><i class="fas fa-user-md"></i> Ameliyat Geçmişi:</label>
-                    <input type="text" class="form-control" name="surgicalHistory" id="surgicalHistory">
-                </div>
-                <div class="form-group">
-                    <label for="summary"><i class="fas fa-file-alt"></i> Şikayetin Özeti:</label>
-                    <input type="text" class="form-control" name="summary" id="summary">
-                </div>
-                <div class="form-group">
-                    <label for="service_coming"><i class="fas fa-venus-mars"></i> Geliş Şekli:</label>
-                    <select class="form-control" id="service_coming" name="service_coming">
-                        <option selected disabled>Lütfen seçim yapın</option>
-                        <option value="Kendi">Kendi imkanı</option>
-                        <option value="112">112 ile</option>
-                        <option value="Sevk">Sevk</option>
-                    </select>
-                </div>
-                
-            </div>
+  <h2 class="my-4">Hasta Ekle</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <div class="alert-container">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
+  <form
+    action="{{ url_for('app_bp.patient_bp.create_patient_route') }}"
+    method="post"
+  >
+    <div class="row">
+      <div class="col-sm">
+        <div class="form-group">
+          <label for="protokol"
+            ><i class="fas fa-birthday-cake"></i> Protokol:</label
+          >
+          <input
+            type="number"
+            autocomplete="off"
+            class="form-control"
+            name="protokol"
+            id="protokol"
+            required
+          />
         </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-4">
-                <button type="submit" class="btn btn-primary btn-block">Değerlendir <i class="fas fa-chevron-circle-right"></i></button>
-            </div>
+        <div class="form-group">
+          <label for="age"><i class="fas fa-birthday-cake"></i> Yaş:</label>
+          <input
+            type="number"
+            autocomplete="off"
+            class="form-control"
+            name="age"
+            id="age"
+            required
+          />
         </div>
-    </form>
-    
+        <div class="form-group">
+          <label for="gender"
+            ><i class="fas fa-venus-mars"></i> Cinsiyet:</label
+          >
+          <select class="form-control" id="gender" name="gender">
+            <option selected disabled>Lütfen seçim yapın</option>
+            <option value="Erkek">Erkek</option>
+            <option value="Kadın">Kadın</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="complaints"
+            ><i class="fas fa-heartbeat"></i> Şikayetler:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="complaints"
+            id="complaints"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="duration"
+            ><i class="far fa-clock"></i> Şikayet Süresi:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="duration"
+            id="duration"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="bloodPressure"
+            ><i class="fas fa-tachometer-alt"></i> Kan Basıncı:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="bloodPressure"
+            id="bloodPressure"
+          />
+        </div>
+        <div class="form-group">
+          <label for="pulse"><i class="fas fa-heart"></i> Nabız:</label>
+          <input type="text" class="form-control" name="pulse" id="pulse" />
+        </div>
+        <div class="form-group">
+          <label for="respiratoryRate"
+            ><i class="fas fa-lungs"></i> Solunum Hızı:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="respiratoryRate"
+            id="respiratoryRate"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="triaj"><i class="fas fa-file-alt"></i> Triaj:</label>
+          <select class="form-control" id="triaj" name="triaj">
+            <option selected disabled>Lütfen seçim yapın</option>
+            <option value="Yeşil">Yeşil</option>
+            <option value="Sarı">Sarı</option>
+            <option value="Kırmızı">Kırmızı</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="form-group">
+          <label for="temperature"
+            ><i class="fas fa-thermometer-half"></i> Vücut Sıcaklığı:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="temperature"
+            id="temperature"
+          />
+        </div>
+        <div class="form-group">
+          <label for="saturation"
+            ><i class="fas fa-water"></i> Oksijen Satürasyonu:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="saturation"
+            id="saturation"
+          />
+        </div>
+        <div class="form-group">
+          <label for="chronicDiseases"
+            ><i class="fas fa-notes-medical"></i> Kronik Hastalıklar
+            Listesi:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="chronicDiseases"
+            id="chronicDiseases"
+          />
+        </div>
+        <div class="form-group">
+          <label for="medications"
+            ><i class="fas fa-pills"></i> Kullanılan İlaçlar:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="medications"
+            id="medications"
+          />
+        </div>
+        <div class="form-group">
+          <label for="allergyHistory"
+            ><i class="fas fa-allergies"></i> Alerji Geçmişi:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="allergyHistory"
+            id="allergyHistory"
+          />
+        </div>
+        <div class="form-group">
+          <label for="surgicalHistory"
+            ><i class="fas fa-user-md"></i> Ameliyat Geçmişi:</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="surgicalHistory"
+            id="surgicalHistory"
+          />
+        </div>
+        <div class="form-group">
+          <label for="summary"
+            ><i class="fas fa-file-alt"></i> Şikayetin Özeti:</label
+          >
+          <input type="text" class="form-control" name="summary" id="summary" />
+        </div>
+        <div class="form-group">
+          <label for="service_coming"
+            ><i class="fas fa-venus-mars"></i> Geliş Şekli:</label
+          >
+          <select
+            class="form-control"
+            id="service_coming"
+            name="service_coming"
+          >
+            <option selected disabled>Lütfen seçim yapın</option>
+            <option value="Kendi">Kendi imkanı</option>
+            <option value="112">112 ile</option>
+            <option value="Sevk">Sevk</option>
+          </select>
+        </div>
+        <div class="col mt-5 mb-3">
+          <button type="submit" class="btn btn-primary btn-block">
+            Değerlendir <i class="fas fa-chevron-circle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 {% endblock %}
