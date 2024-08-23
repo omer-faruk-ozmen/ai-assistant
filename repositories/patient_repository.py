@@ -54,8 +54,9 @@ class PatientRepository(BaseRepository):
         patients.reverse()
         return patients
     
-    def get_all_patients_with_relationships_paginate(self,page,per_page):
-        pagination = self.model.query.paginate(page=page, per_page=per_page, error_out=False)
+    def get_all_patients_with_relationships_paginate(self, page, per_page):
+        pagination = self.model.query.order_by(self.model.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
         patients = pagination.items
         for patient in patients:
             patient.user = User.query.filter_by(id=patient.user_id).first()
@@ -63,8 +64,6 @@ class PatientRepository(BaseRepository):
             patient.diagnoses = Diagnosis.query.filter_by(patient_id=patient.id).all()
             patient.examinations = Examination.query.filter_by(patient_id=patient.id).all()
             patient.interventions = Intervention.query.filter_by(patient_id=patient.id).all()
-
-        patients.reverse()
 
         return pagination
 
