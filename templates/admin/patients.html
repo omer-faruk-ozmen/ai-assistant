@@ -243,11 +243,11 @@ endblock %} {% block admin_content %}
         event.stopPropagation();
         const id = button.getAttribute("data-id");
         const modal = new bootstrap.Modal(document.getElementById("editModal"));
-        modal.show();
         document.getElementById("edit_patient_id").value = id;
         document.querySelector(
           "#editModal form"
-        ).action = `/patient/edit/${id}`;
+        ).action = `/patient/edit-result/${id}`;
+        modal.show();
       });
     });
 

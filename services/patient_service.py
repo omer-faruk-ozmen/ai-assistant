@@ -1,5 +1,6 @@
 # patient_service.py
 import datetime
+import logging
 from models import db, Patient
 from models.conclusion import Conclusion
 from models.diagnosis import Diagnosis
@@ -17,6 +18,8 @@ conclusion_repo = ConclusionRepository()
 diagnosis_repo = DiagnosisRepository()
 examination_repo = ExaminationRepository()
 intervention_repo = InterventionRepository()
+
+_logger = logging.getLogger('app')
 
 def create_patient(user_id, data, date, ip_address):
     patient = patient_repo.add_patient(
@@ -100,6 +103,7 @@ def delete_patient(id):
         return False
 
     patient_repo.delete(patient)
+    
     return True
 
 def list_patients_by_user_id(user_id):

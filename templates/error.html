@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error - Something Went Wrong</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <!-- Örnek CSS dosyası -->
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bir Hata Oluştu</h1>
+      <p>Üzgünüz, bir hata meydana geldi ve işleminiz tamamlanamadı.</p>
+      <p>
+        Lütfen tekrar deneyin veya birkaç dakika sonra geri dönün. Sorun devam
+        ederse, sistem yöneticinizle iletişime geçin.
+      </p>
+      <div class="error-details">
+        <p>
+          Hata Detayları: {{ error_message if error_message else "Bilinmeyen bir
+          hata." }}
+        </p>
+      </div>
+      <a href="{{ url_for('main_bp.home') }}" class="btn btn-primary"
+        >Ana Sayfaya Dön</a
+      >
+      <a href="javascript:history.back()" class="btn btn-secondary">Geri Git</a>
+    </div>
+  </body>
+</html>

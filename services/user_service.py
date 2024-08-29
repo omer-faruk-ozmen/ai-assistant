@@ -3,7 +3,6 @@ from models.user import User
 from repositories.patient_repository import PatientRepository
 from repositories.user_repository import UserRepository
 
-
 user_repo = UserRepository()
 patient_repo = PatientRepository()
 

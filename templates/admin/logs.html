@@ -1,0 +1,83 @@
+{% extends "admin/base.html" %} 
+{% block title %}Log Kayıtları{% endblock %} 
+{% block admin_content %}
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Log Kayıtları</h1>
+
+  <form method="get" action="{{ url_for('app_bp.admin_bp.view_logs') }}" class="mb-4">
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label for="selected_date">Gün Seç</label>
+                <select class="form-control" id="selected_date" name="selected_date">
+                  {% for date in available_dates %}
+                      <option value="{{ date }}" {% if selected_date == date %}selected{% endif %}>{{ date }}</option>
+                  {% endfor %}
+              </select>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label for="limit">Sayfa Başına Kayıt Sayısı</label>
+                <input type="number" class="form-control" id="limit" name="limit" min="1" value="{{ limit }}">
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label for="log_level">Log Seviyesi Seç</label>
+                <select class="form-control" id="log_level" name="log_level">
+                    <option value="Hepsi" {{ 'selected' if selected_level == 'Hepsi' }}>Hepsi</option>
+                    <option value="INFO" {{ 'selected' if selected_level == 'INFO' }}>INFO</option>
+                    <option value="WARNING" {{ 'selected' if selected_level == 'WARNING' }}>WARNING</option>
+                    <option value="ERROR" {{ 'selected' if selected_level == 'ERROR' }}>ERROR</option>
+                    <option value="DEBUG" {{ 'selected' if selected_level == 'DEBUG' }}>DEBUG</option>
+                    <option value="CRITICAL" {{ 'selected' if selected_level == 'CRITICAL' }}>CRITICAL</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+        </div>
+    </div>
+</form>
+
+  <div class="card-body">
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{{ url_for('app_bp.admin_bp.dashboard') }}" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Panele Dön
+      </a>
+      <a href="#" class="btn btn-secondary" onclick="location.reload();">
+        <i class="fas fa-sync-alt"></i> Yenile
+      </a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Tarih ve Saat</th>
+            <th>Seviye</th>
+            <th>Modül</th>
+            <th>Mesaj</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr
+            class="{% if 'INFO' in log.level %}table-info{% elif 'WARNING' in log.level %}table-warning{% elif 'ERROR' in log.level %}table-danger{% elif 'DEBUG' in log.level %}table-success{% elif 'CRITICAL' in log.level %}table-dark{% else %}table-light{% endif %}"
+          >
+            <td>{{ log.datetime }}</td> <!-- Tarih ve Saat -->
+            <td>{{ log.level }}</td> <!-- Seviye -->
+            <td>{{ log.module }}</td> <!-- Modül (route) -->
+            <td>{{ log.message }}</td> <!-- Mesaj -->
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

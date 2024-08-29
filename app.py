@@ -1,3 +1,4 @@
+import logging
 import os
 from flask import Flask, flash, g, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +9,8 @@ from config import Config
 from models import db, bcrypt
 from routes import app_bp
 from services.auth_service import get_current_user as auth_get_current_user
-from utils.helpers import get_current_user as helper_get_current_user
+from utils.helpers import _init_logger, get_current_user as helper_get_current_user
+_logger = logging.getLogger('app')
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +20,7 @@ def create_app():
     jwt = JWTManager(app)
     migrate = Migrate(app, db)
     app.register_blueprint(app_bp)
+    _init_logger(log_level=logging.INFO)
 
     @app.before_request
     def before_request_func():
@@ -66,4 +69,5 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', 8080))  
+    _logger.info('App started in %s', os.getcwd())
     app.run(host='0.0.0.0', port=port, debug=False)
