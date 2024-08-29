@@ -18,7 +18,6 @@ admin_bp = Blueprint('admin_bp', __name__)
 @jwt_required()
 @role_required('admin')
 def dashboard():
-    logger.info("Admin accessed the dashboard page.")
     return render_template('admin/dashboard.html')
 
 @admin_bp.route('/patients', methods=['GET'])
@@ -125,7 +124,7 @@ def view_logs():
             for line in lines:
                 parts = line.split(' - ')
                 if len(parts) < 5:
-                    continue  # Geçersiz satırları atla
+                    continue 
                 log_entry = {
                     "datetime": parts[0].strip(),
                     "level": parts[1].strip(),

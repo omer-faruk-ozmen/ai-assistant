@@ -36,40 +36,22 @@ intervention_repo = InterventionRepository()
 thread_ids=[]
 
 def _init_logger(log_level=logging.INFO, log_dir='logs'):
-    """
-    Initialize the logger with specified log level and handlers.
-
-    :param log_level: The logging level (e.g., logging.DEBUG, logging.INFO).
-    :param log_dir: The directory where log files will be stored.
-    """
-    # Logger'ı alın veya oluşturun
     logger = logging.getLogger('app')
 
-    # Eğer logger zaten yapılandırılmışsa, tekrar ekleme yapmamak için mevcut handler'ları temizleyin.
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    # Log seviyesi ayarla
     logger.setLevel(log_level)
 
-    # Konsola log yazdırma handler'ı (StreamHandler)
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_format = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    console_handler.setFormatter(console_format)
-    logger.addHandler(console_handler)
-
-    # Log klasörünü oluştur
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    # Günlük bazda dönen dosya log handler'ı (TimedRotatingFileHandler)
     log_file = os.path.join(log_dir, 'app.log')
-    file_handler = TimedRotatingFileHandler(log_file, when='midnight', interval=1, backupCount=7)  # Her gece yarısı döner, 7 gün saklar
+    file_handler = TimedRotatingFileHandler(log_file, when='midnight', interval=1, backupCount=7)
     file_format = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     file_handler.setFormatter(file_format)
     logger.addHandler(file_handler)
 
-    # Logger başarıyla başlatıldığını bildir
     logger.info("Logger initialized successfully!")
 
 def get_client_ip():
