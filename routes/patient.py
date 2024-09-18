@@ -81,9 +81,6 @@ def update_patient_route(id):
                 'triaj': request.form.get('triaj', 'Belirtilmemiş')
             }
 
-            print("data.triaj",data['triaj'])
-            print("data.triaj",request.form.get('triaj'))
-
             patient = update_patient(id, data)
             if not patient:
                 logger.warning(f"Patient with ID {id} not found for user {current_user['username']}.")
