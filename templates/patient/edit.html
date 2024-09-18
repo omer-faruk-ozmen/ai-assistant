@@ -62,10 +62,10 @@
                 <div class="form-group">
                     <label for="triaj"><i class="fas fa-file-alt"></i> Triaj:</label>
                     <select class="form-control" id="triaj" name="triaj">
-                        <option selected disabled>{{patient.triaj}}</option>
-                        <option value="Yeşil">Yeşil</option>
-                        <option value="Sarı">Sarı</option>
-                        <option value="Kırmızı">Kırmızı</option>
+                        <option value="Belirtilmemiş" {% if not patient.triaj %}selected{% endif %}>Belirtilmemiş</option>
+                        <option value="Kırmızı" {% if patient.triaj=='Kırmızı' %}selected{% endif %}>Kırmızı</option>
+                        <option value="Sarı" {% if patient.triaj=='Sarı' %}selected{% endif %}>Sarı</option>
+                        <option value="Yeşil" {% if patient.triaj=='Yeşil' %}selected{% endif %}>Yeşil</option>
                     </select>
                 </div>
             </div>

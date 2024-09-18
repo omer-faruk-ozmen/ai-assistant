@@ -72,18 +72,17 @@ def update_patient(patient_id, data):
     patient.summary = data.get('summary', patient.summary),
     patient.service_coming=data.get('service_coming',patient.service_coming),
     patient.triaj = data.get('triaj',patient.triaj)
-
     patient_repo.update(patient)
 
-    conclusion_repo.delete_by_patient_id(patient_id)
-    diagnosis_repo.delete_by_patient_id(patient_id)
-    examination_repo.delete_by_patient_id(patient_id)
-    intervention_repo.delete_by_patient_id(patient_id)
+    # conclusion_repo.delete_by_patient_id(patient_id)
+    # diagnosis_repo.delete_by_patient_id(patient_id)
+    # examination_repo.delete_by_patient_id(patient_id)
+    # intervention_repo.delete_by_patient_id(patient_id)
 
-    prompt = helpers.create_prompt(patient=patient)
-    response = helpers.generate_with_ai(prompt=prompt)
+    # prompt = helpers.create_prompt(patient=patient)
+    # response = helpers.generate_with_ai(prompt=prompt)
 
-    helpers.process_patient_dict_data(patient_id=patient.id, response=response, prompt=prompt)
+    # helpers.process_patient_dict_data(patient_id=patient.id, response=response, prompt=prompt)
 
     return patient
 

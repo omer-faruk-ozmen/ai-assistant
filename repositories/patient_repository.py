@@ -31,7 +31,6 @@ class PatientRepository(BaseRepository):
 
     def get_all_relationships(self, patient_id):
         patient = self.get_by_id(patient_id)
-        
         if not patient:
             return None
         

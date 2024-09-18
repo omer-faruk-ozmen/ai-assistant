@@ -1,6 +1,6 @@
 from datetime import datetime
 import logging
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, json, redirect, render_template, request, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from utils import helpers
 from services.patient_service import add_patient_result, create_patient, delete_patient_with_relationships, get_patient_with_relationships, update_patient, list_patients_by_user_id
@@ -80,6 +80,10 @@ def update_patient_route(id):
                 'service_coming': request.form.get('service_coming', 'Belirtilmemiş'),
                 'triaj': request.form.get('triaj', 'Belirtilmemiş')
             }
+
+            print("data.triaj",data['triaj'])
+            print("data.triaj",request.form.get('triaj'))
+
             patient = update_patient(id, data)
             if not patient:
                 logger.warning(f"Patient with ID {id} not found for user {current_user['username']}.")
