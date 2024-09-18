@@ -1,11 +1,11 @@
 from datetime import datetime
 import os
 from flask import Blueprint, flash, redirect, render_template, request, send_file, url_for
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 import logging
 
 from services.admin_service import get_all_patients_with_relationships_admin, get_all_patients_with_relationships_paginate_admin
-from services.patient_service import delete_patient_with_relationships, get_patients_by_user_id
+from services.patient_service import add_patient_result, delete_patient_with_relationships, get_patients_by_user_id
 from services.user_service import block_user, get_all_users, get_user_by_id, unblock_user, update_user_role_service
 from utils.decorators import role_required
 from utils.helpers import generate_excel
@@ -25,14 +25,14 @@ def dashboard():
 @role_required('admin')
 def patients():
     page = request.args.get('page', 1, type=int)
-    logger.info(f"Admin accessed the patients page with page number {page}.")
+    per_page = request.args.get('per_page', 20, type=int)
+    logger.info(f"Admin accessed the patients page with page number {page} and per_page {per_page}.")
     
-    per_page = 20
     try:
         pagination = get_all_patients_with_relationships_paginate_admin(page, per_page)
         patients = pagination.items
         logger.info(f"Fetched {len(patients)} patients for page {page}.")
-        return render_template('admin/patients.html', patients=patients, pagination=pagination)
+        return render_template('admin/patients.html', patients=patients, pagination=pagination, per_page=per_page)
     except Exception as e:
         logger.error(f"Error fetching patients for page {page}: {e}")
         flash('Hasta listesi alınırken bir hata oluştu.', 'danger')
@@ -147,6 +147,35 @@ def view_logs():
         flash('Log dosyası okunurken bir hata oluştu.', 'danger')
     
     return redirect(url_for('app_bp.admin_bp.dashboard'))
+
+@admin_bp.route('/edit-admin-result/<int:admin_id>', methods=['POST'])
+@jwt_required()
+def edit_admin_result_route(admin_id):
+    current_user = get_jwt_identity()
+    logger.info(f"Admin {current_user['username']} is adding a result for admin ID: {admin_id}.")
+    
+    result = request.form.get('result')
+    page = request.form.get('page', 1, type=int)
+    per_page = request.form.get('per_page', 20, type=int)
+
+    if not result:
+        logger.warning(f"Result is missing for admin ID: {admin_id} by admin {current_user['username']}.")
+        flash('Sonuç gerekli.', 'danger')
+        return redirect(url_for('app_bp.admin_bp.patients', page=page, per_page=per_page))
+
+    try:
+        conclusion = add_patient_result(admin_id, result)
+        if conclusion:
+            logger.info(f"Result added successfully for admin ID: {admin_id} by admin {current_user['username']}.")
+            flash('Sonuç başarıyla eklendi.', 'success')
+        else:
+            logger.warning(f"Failed to add result for admin ID: {admin_id} by admin {current_user['username']}.")
+            flash('Sonuç eklenirken bir hata oluştu.', 'danger')
+    except Exception as e:
+        logger.error(f"Error adding result for admin ID {admin_id} by admin {current_user['username']}: {e}")
+        flash('Bir hata oluştu. Lütfen tekrar deneyin.', 'danger')
+
+    return redirect(url_for('app_bp.admin_bp.patients', page=page, per_page=per_page))
 
 @admin_bp.route('/update_user_role', methods=['POST'])
 @jwt_required()

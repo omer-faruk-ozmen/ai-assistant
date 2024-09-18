@@ -98,7 +98,7 @@ endblock %} {% block admin_content %}
       <li class="page-item">
         <a
           class="page-link"
-          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.prev_num) }}"
+          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.prev_num, per_page=pagination.per_page) }}"
           >Önceki</a
         >
       </li>
@@ -115,7 +115,7 @@ endblock %} {% block admin_content %}
       <li class="page-item">
         <a
           class="page-link"
-          href="{{ url_for('app_bp.admin_bp.patients', page=page_num) }}"
+          href="{{ url_for('app_bp.admin_bp.patients', page=page_num, per_page=pagination.per_page) }}"
           >{{ page_num }}</a
         >
       </li>
@@ -125,7 +125,7 @@ endblock %} {% block admin_content %}
       <li class="page-item">
         <a
           class="page-link"
-          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.next_num) }}"
+          href="{{ url_for('app_bp.admin_bp.patients', page=pagination.next_num, per_page=pagination.per_page) }}"
           >Sonraki</a
         >
       </li>
@@ -199,18 +199,54 @@ endblock %} {% block admin_content %}
           aria-label="Close"
         ></button>
       </div>
-      <form method="post" action="">
+      <form id="editResultForm" method="post" action="">
         <div class="modal-body">
           <input type="hidden" id="edit_patient_id" name="id" />
+          <input
+            type="hidden"
+            id="edit_page"
+            name="page"
+            value="{{ pagination.page }}"
+          />
+          <input
+            type="hidden"
+            id="edit_per_page"
+            name="per_page"
+            value="{{ pagination.per_page }}"
+          />
           <div class="form-group">
-            <label for="result">Sonuç:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="result"
-              name="result"
-              required
-            />
+            <label class="mb-2">Sonuç:</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="result"
+                id="resultGreen"
+                value="Yeşil"
+                required
+              />
+              <label class="form-check-label" for="resultGreen"> Yeşil </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="result"
+                id="resultYellow"
+                value="Sarı"
+              />
+              <label class="form-check-label" for="resultYellow"> Sarı </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="result"
+                id="resultRed"
+                value="Kırmızı"
+              />
+              <label class="form-check-label" for="resultRed"> Kırmızı </label>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -244,12 +280,27 @@ endblock %} {% block admin_content %}
         const id = button.getAttribute("data-id");
         const modal = new bootstrap.Modal(document.getElementById("editModal"));
         document.getElementById("edit_patient_id").value = id;
+        document.getElementById("edit_page").value = "{{ pagination.page }}";
+        document.getElementById("edit_per_page").value =
+          "{{ pagination.per_page }}";
         document.querySelector(
           "#editModal form"
-        ).action = `/patient/edit-result/${id}`;
+        ).action = `/admin/edit-admin-result/${id}`;
         modal.show();
       });
     });
+
+    document
+      .getElementById("editResultForm")
+      .addEventListener("submit", function (event) {
+        const selectedResult = document.querySelector(
+          'input[name="result"]:checked'
+        );
+        if (!selectedResult) {
+          event.preventDefault();
+          alert("Lütfen bir sonuç seçin.");
+        }
+      });
 
     const deleteButtons = document.querySelectorAll(".delete-btn");
     deleteButtons.forEach((button) => {
